@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Love Page ❤️</title>
+<style>
+  body {
+    margin: 0;
+    overflow: hidden;
+    background: #000;
+    font-family: Arial, sans-serif;
+    color: white;
+  }
+  #canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 0;
+  }
+  .content {
+    position: relative;
+    z-index: 1;
+    text-align: center;
+    margin-top: 15%;
+  }
+  img#qr {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 150px;
+  }
+</style>
+</head>
+<body>
+
+<canvas id="canvas"></canvas>
+
+<div class="content">
+  <h1>❤️ I Love You Ishu ❤️</h1>
+  <p>Scan the QR for a surprise!</p>
+  <img id="qr" src="qr.png" alt="Scan Me">
+</div>
+
+<!-- Music -->
+<audio autoplay loop>
+  <source src="parano_slowed.mp3" type="audio/mpeg">
+</audio>
+
+<script>
+const canvas = document.getElementById('canvas');
+const ctx = canvas.getContext('2d');
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+
+let hearts = [];
+let sparkles = [];
+
+class Heart {
+  constructor() {
+    this.x = Math.random() * canvas.width;
+    this.y = canvas.height + 50;
+    this.size = 10 + Math.random() * 20;
+    this.speed = 1 + Math.random() * 2;
+    this.alpha = 0.5 + Math.random() * 0.5;
+  }
+}
+
+class Sparkle {
+  constructor() {
+    this.x = Math.random() * canvas.width;
+    this.y = Math.random() * canvas.height;
+    this.size = 1 + Math.random() * 3;
+    this.alpha = 0.3 + Math.random() * 0.7;
+    this.speed = 0.5 + Math.random();
+  }
+}
+
+function createObjects() {
+  for (let i = 0; i < 30; i++) hearts.push(new Heart());
+  for (let i = 0; i < 50; i++) sparkles.push(new Sparkle());
+}
+
+function animate() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+  // Hearts
+  hearts.forEach((heart, i) => {
+    ctx.fillStyle = `rgba(255,0,0,${heart.alpha})`;
+    ctx.beginPath();
+    ctx.arc(heart.x, heart.y, heart.size, 0, Math.PI * 2);
+    ctx.fill();
+    heart.y -= heart.speed;
+    if (heart.y < -50) hearts[i] = new Heart();
+  });
+
+  // Sparkles
+  sparkles.forEach(s => {
+    ctx.fillStyle = `rgba(255,255,255,${s.alpha})`;
+    ctx.beginPath();
+    ctx.arc(s.x, s.y, s.size, 0, Math.PI * 2);
+    ctx.fill();
+    s.y -= s.speed;
+    if (s.y < 0) s.y = canvas.height;
+  });
+
+  requestAnimationFrame(animate);
+}
+
+createObjects();
+animate();
+</script>
+
+</body>
+</html>
